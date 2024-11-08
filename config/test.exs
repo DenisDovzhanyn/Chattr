@@ -7,7 +7,7 @@ import Config
 # Run `mix help test` for more information.
 config :chattr, Chattr.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "glossy",
   hostname: "localhost",
   database: "chattr_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,

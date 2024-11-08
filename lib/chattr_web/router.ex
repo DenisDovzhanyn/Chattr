@@ -1,4 +1,5 @@
 defmodule ChattrWeb.Router do
+  
   use ChattrWeb, :router
 
   pipeline :api do
@@ -7,7 +8,10 @@ defmodule ChattrWeb.Router do
 
   scope "/api", ChattrWeb do
     pipe_through :api
+    resources "/messages", MessageController, only: [:create, :show]
   end
+
+
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:chattr, :dev_routes) do

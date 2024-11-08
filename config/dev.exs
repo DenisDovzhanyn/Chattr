@@ -3,7 +3,7 @@ import Config
 # Configure your database
 config :chattr, Chattr.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "glossy",
   hostname: "localhost",
   database: "chattr_dev",
   stacktrace: true,
