@@ -8,9 +8,8 @@ defmodule ChattrWeb.Router do
 
   scope "/api", ChattrWeb do
     pipe_through :api
-    resources "/messages", MessageController, only: [:create, :show]
-    get "/messages/by_chat/:chat_id", MessageController, :show
-    get "/messages/by_user/:user_id", MessageController, :show
+    resources "/messages", MessageController, only: [:create]
+    get "/messages", MessageController, :show
   end
 
 
