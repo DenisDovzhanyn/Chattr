@@ -37,17 +37,23 @@ defmodule Chattr.Messages do
 
   """
   def get_message_by(type_of_id) do
+    IO.puts('im in here')
+    IO.inspect(type_of_id)
     case type_of_id do
       %{id: id} ->
+        IO.puts('now im in the id case #{id}')
         Repo.all(from x in Message, where: x.id == ^id)
 
       %{chat_id: chat_id} ->
+        IO.puts('now in chat id clause #{chat_id}')
         Repo.all(from x in Message, where: x.chat_id == ^chat_id)
 
       %{user_id: user_id} ->
+        IO.puts('now in user id clause #{user_id}')
         Repo.all(from x in Message, where: x.user_id == ^user_id)
 
       _ ->
+        IO.puts('looks like its not matching anything')
         []
     end
 

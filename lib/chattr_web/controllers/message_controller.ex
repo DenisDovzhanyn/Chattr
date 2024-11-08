@@ -17,8 +17,18 @@ defmodule ChattrWeb.MessageController do
     end
   end
 
+  def show(conn, %{"chat_id" => chat_id}) do
+    message = Messages.get_message_by(%{chat_id: chat_id})
+    json(conn, message)
+  end
+
+  def show(conn, %{"user_id" => user_id}) do
+    message = Messages.get_message_by(%{user_id: user_id})
+    json(conn, message)
+  end
+
   def show(conn, %{"id" => id}) do
-    message = Messages.get_message_by(id)
+    message = Messages.get_message_by(%{id: id})
     json(conn, message)
   end
 end
