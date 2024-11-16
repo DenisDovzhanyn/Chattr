@@ -12,6 +12,7 @@ defmodule ChattrWeb.Router do
     get "/messages", MessageController, :show
     resources "/chats", ChatController, only: [:create, :show]
     post "/signup", UserController, :create
+    post "/login", UserController, :login
   end
 
 

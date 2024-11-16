@@ -37,6 +37,8 @@ defmodule Chattr.Accounts do
   """
   def get_users!(id), do: Repo.get!(Users, id)
 
+  def get_users_by_username(username), do: Repo.get_by(Users, username: username)
+
   @doc """
   Creates a users.
 
@@ -53,6 +55,21 @@ defmodule Chattr.Accounts do
     %Users{}
     |> Users.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def login_users(%{"username" => username, "password" => password}) do
+    case get_users_by_username(username) do
+      %Users{password: hashed_password} ->
+        if Pbkdf2.verify_pass(password, hashed_password) do
+         #jwt token given here
+          {:ok, "logged in"}
+        else
+          {:error, "password does not match"}
+        end
+
+      _ -> {:error, "user not found"}
+    end
+
   end
 
   @doc """

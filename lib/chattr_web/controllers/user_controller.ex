@@ -25,4 +25,18 @@ defmodule ChattrWeb.UserController do
     user = Accounts.update_users_display_name(conn.params)
     json(conn, user)
   end
+
+  def login(conn, %{"username" => username, "password" => password} = info) do
+    case Accounts.login_users(info) do
+      {:ok, text} ->
+        conn
+        |> put_status(:ok)
+        |> json(text)
+
+      {:error, text} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(text)
+    end
+  end
 end
