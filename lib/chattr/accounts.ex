@@ -59,10 +59,10 @@ defmodule Chattr.Accounts do
 
   def login_users(%{"username" => username, "password" => password}) do
     case get_users_by_username(username) do
-      %Users{password: hashed_password} ->
+      %Users{password: hashed_password, id: id} ->
         if Pbkdf2.verify_pass(password, hashed_password) do
          #jwt token given here
-          {:ok, "logged in"}
+          {:ok, "logged in", id}
         else
           {:error, "password does not match"}
         end

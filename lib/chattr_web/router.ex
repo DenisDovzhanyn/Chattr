@@ -6,13 +6,22 @@ defmodule ChattrWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :authenticated do
+    plug ChattrWeb.AuthenticateJWT
+    plug :accepts, ["json"]
+  end
+
   scope "/api", ChattrWeb do
     pipe_through :api
+
+    post "/signup", UserController, :create
+    post "/login", UserController, :login
+
+    pipe_through :authenticated
+
     resources "/messages", MessageController, only: [:create]
     get "/messages", MessageController, :show
     resources "/chats", ChatController, only: [:create, :show]
-    post "/signup", UserController, :create
-    post "/login", UserController, :login
   end
 
 

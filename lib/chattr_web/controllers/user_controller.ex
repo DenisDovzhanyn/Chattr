@@ -1,14 +1,16 @@
 defmodule ChattrWeb.UserController do
   use ChattrWeb, :controller
 
+  alias Chattr.Accounts.Users
   alias Chattr.Accounts
 
   def create(conn , %{"username" => username, "password" => password, "display_name" => display_name}) do
     case Accounts.create_users(%{username: username, temp_password: password, display_name: display_name}) do
-      {:ok, user} ->
+      {:ok, %Users{id: id}} ->
+        jwt_token = Auth.generate_and_sign!(%{"id" => id})
         conn
         |> put_status(:created)
-        |> json(user)
+        |> json(jwt_token)
 
       {:error, changeset} ->
 
@@ -28,10 +30,11 @@ defmodule ChattrWeb.UserController do
 
   def login(conn, %{"username" => username, "password" => password} = info) do
     case Accounts.login_users(info) do
-      {:ok, text} ->
+      {:ok, _, id} ->
+        jwt_token = Auth.generate_and_sign!(%{"id" => id})
         conn
         |> put_status(:ok)
-        |> json(text)
+        |> json(jwt_token)
 
       {:error, text} ->
         conn

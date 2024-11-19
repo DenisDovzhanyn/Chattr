@@ -45,7 +45,8 @@ defmodule Chattr.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
-      {:pbkdf2_elixir, "~> 2.3"}
+      {:pbkdf2_elixir, "~> 2.3"},
+      {:joken, "~> 2.6"}
     ]
   end
 

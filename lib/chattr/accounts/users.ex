@@ -2,7 +2,7 @@ defmodule Chattr.Accounts.Users do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Jason.Encoder, only: [:username, :display_name]}
+  @derive {Jason.Encoder, only: [:username, :display_name, :id]}
 
   schema "users" do
     field :username, :string
