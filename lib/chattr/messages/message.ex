@@ -2,15 +2,15 @@ defmodule Chattr.Messages.Message do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Jason.Encoder, only: [:id, :sent_time, :content, :chat_id, :user_id, :inserted_at, :updated_at]}
-  
+  @derive {Jason.Encoder, only: [:id, :content, :chat_id, :user_id, :inserted_at]}
+
   schema "messages" do
-    field :sent_time, :utc_datetime
     field :content, :string
     belongs_to :chat, Chattr.Chats.Chat
     belongs_to :user, Chattr.Accounts.Users
 
     timestamps(type: :utc_datetime)
+    @timestamps_opts [type: :utc_datetime, updated_at: false]
   end
 
   @doc false

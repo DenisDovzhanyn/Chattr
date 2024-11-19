@@ -4,6 +4,8 @@ defmodule Chattr.Messages do
   """
 
   import Ecto.Query, warn: false
+  alias Chattr.UserChat
+  alias Chattr.Chats
   alias Expo.Message
   alias Chattr.Repo
 
@@ -36,34 +38,28 @@ defmodule Chattr.Messages do
       ** (Ecto.NoResultsError)
 
   """
-  def get_message_by(type_of_id) do
-    IO.puts('im in here')
-    IO.inspect(type_of_id)
+  def get_message_by(type_of_id, id) do
     case type_of_id do
-      %{"id" => id} ->
-        IO.puts('now im in the id case #{id}')
-        Repo.all(from x in Message, where: x.id == ^id)
 
       %{"chat_id" => chat_id, "last_x_messages" => last_x_messages} ->
-        IO.puts('now in chat id / last x msgs clause')
-        Repo.all(
-          from x in Message,
-          where: x.chat_id == ^chat_id,
-          order_by: [desc: x.sent_time],
-          limit: ^String.to_integer(last_x_messages)
-        )
+
+        case Chats.get_chat_by_user_and_chat_id(%{"user_id" => id, "chat_id" => chat_id}) do
+
+         %UserChat{} ->
+            Repo.all(
+            from x in Message,
+            where: x.chat_id == ^chat_id,
+            order_by: [desc: x.inserted_at],
+            limit: ^String.to_integer(last_x_messages)
+            )
+
+          nil -> {:unauthorized}
+       end
 
       %{"chat_id" => chat_id} ->
-        IO.puts('now in chat id clause #{chat_id}')
         Repo.all(from x in Message, where: x.chat_id == ^chat_id)
 
-
-      %{"user_id" => user_id} ->
-        IO.puts('now in user id clause #{user_id}')
-        Repo.all(from x in Message, where: x.user_id == ^user_id)
-
       _ ->
-        IO.puts('looks like its not matching anything')
         []
     end
   end

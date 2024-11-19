@@ -27,4 +27,10 @@ defmodule ChattrWeb.AuthenticateJWT do
     |> json(%{error: "Unauthorized"})
     |> halt()
   end
+
+  def not_authorized(conn) do
+    conn
+    |> put_status(:unauthorized)
+    |> json(%{error: "Unauthorized"})
+  end
 end

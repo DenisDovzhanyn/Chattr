@@ -1,6 +1,7 @@
 defmodule ChattrWeb.MessageController do
   use ChattrWeb, :controller
 
+  alias ChattrWeb.AuthenticateJWT
   alias Chattr.Messages
 
   def create(conn, %{"message" => message_params}) do
@@ -18,7 +19,15 @@ defmodule ChattrWeb.MessageController do
   end
 
   def show(conn, _params) do
-    message = Messages.get_message_by(conn.params)
-    json(conn, message)
+    case Messages.get_message_by(conn.params, conn.assigns[:claims]["user_id"]) do
+      {:ok, messages} ->
+        conn
+        |> put_status(:ok)
+        |> json(messages)
+
+      _ ->
+        AuthenticateJWT.not_authorized(conn)
+    end
+
   end
 end

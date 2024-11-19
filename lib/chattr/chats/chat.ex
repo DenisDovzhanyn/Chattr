@@ -6,7 +6,7 @@ defmodule Chattr.Chats.Chat do
   schema "chats" do
     field :last_msg_time, :utc_datetime
     many_to_many :users, Chattr.Accounts.Users, join_through: "user_chats"
-    timestamps(type: :utc_datetime)
+    @timestamps_opts [type: :utc_datetime, inserted_at: false, updated_at: false]
   end
 
   @doc false

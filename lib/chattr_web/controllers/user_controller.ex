@@ -7,7 +7,7 @@ defmodule ChattrWeb.UserController do
   def create(conn , %{"username" => username, "password" => password, "display_name" => display_name}) do
     case Accounts.create_users(%{username: username, temp_password: password, display_name: display_name}) do
       {:ok, %Users{id: id}} ->
-        jwt_token = Auth.generate_and_sign!(%{"id" => id})
+        jwt_token = Auth.generate_and_sign!(%{"user_id" => id})
         conn
         |> put_status(:created)
         |> json(jwt_token)
@@ -16,7 +16,7 @@ defmodule ChattrWeb.UserController do
 
         errs = changeset.errors
         |> Enum.map(&EncodeError.encode/1)
-        IO.inspect(errs)
+
         conn
         |> put_status(:unprocessable_entity)
         |> json(%{errors: errs})
@@ -31,7 +31,8 @@ defmodule ChattrWeb.UserController do
   def login(conn, %{"username" => username, "password" => password} = info) do
     case Accounts.login_users(info) do
       {:ok, _, id} ->
-        jwt_token = Auth.generate_and_sign!(%{"id" => id})
+        jwt_token = Auth.generate_and_sign!(%{"user_id" => id,})
+
         conn
         |> put_status(:ok)
         |> json(jwt_token)

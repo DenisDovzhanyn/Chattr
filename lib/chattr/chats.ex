@@ -43,7 +43,7 @@ defmodule Chattr.Chats do
     case query_params do
 
       %{"user_id" => user_id, "last_x_chats" => last_x_chats} ->
-        IO.puts('in userid / last x chats clause')
+
         Repo.all(from x in Chat,
           join: uc in UserChat, on: uc.chat_id == x.id,
           where: uc.user_id == ^user_id,
@@ -51,17 +51,22 @@ defmodule Chattr.Chats do
           limit: ^String.to_integer(last_x_chats))
 
       %{"user_id" => user_id} ->
-        IO.puts('in user id clause')
-        Repo.all(from x in Chat,
-          join: uc in UserChat, on: uc.chat_id == x.id,
+
+        Repo.all(from uc in UserChat,
+          join: c in Chat, on: c.chat_id == uc.id,
           where: uc.user_id == ^user_id)
-          
+
       _ ->
-        IO.puts('no matches in get chat function')
+
         []
     end
 
   end
+
+  def get_chat_by_user_and_chat_id(%{"user_id" => user_id, "chat_id" => chat_id}) do
+    Repo.get_by(UserChat, user_id: user_id, chat_id: chat_id)
+  end
+
 
   @doc """
   Creates a chat.

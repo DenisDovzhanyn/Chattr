@@ -12,7 +12,7 @@ defmodule Chattr.Accounts.Users do
 
     many_to_many :chats, Chattr.Chats.Chat, join_through: "user_chats"
 
-    timestamps(type: :utc_datetime)
+    @timestamps_opts [type: :utc_datetime, inserted_at: false, updated_at: false]
   end
 
   @doc false
