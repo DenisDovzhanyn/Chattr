@@ -4,8 +4,9 @@ defmodule ChattrWeb.MessageController do
   alias ChattrWeb.AuthenticateJWT
   alias Chattr.Messages
 
-  def create(conn, %{"message" => message_params}) do
-    case Messages.create_message(message_params) do
+  def create(conn, %{"content" => content, "chat_id" => chat_id} = msg_params) do
+    msg_params = Map.put(msg_params, "user_id", conn.assigns[:claims]["user_id"])
+    case Messages.create_message(msg_params) do
       {:ok, message} ->
         conn
         |> put_status(:created)
@@ -18,6 +19,10 @@ defmodule ChattrWeb.MessageController do
         conn
         |> put_status(:unprocessable_entity)
         |> json(%{errors: errs})
+
+      {:unauthorized} ->
+        conn
+        |> AuthenticateJWT.not_authorized()
     end
   end
 
