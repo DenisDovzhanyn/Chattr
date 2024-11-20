@@ -22,6 +22,7 @@ defmodule ChattrWeb.Router do
     resources "/messages", MessageController, only: [:create]
     get "/messages", MessageController, :show
     resources "/chats", ChatController, only: [:create, :show]
+    post "/chats/adduser", ChatController, :add_user
   end
 
 
