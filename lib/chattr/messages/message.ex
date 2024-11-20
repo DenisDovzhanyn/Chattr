@@ -3,6 +3,7 @@ defmodule Chattr.Messages.Message do
   import Ecto.Changeset
 
   @derive {Jason.Encoder, only: [:id, :content, :chat_id, :user_id, :inserted_at]}
+  @timestamps_opts [type: :utc_datetime, updated_at: false]
 
   schema "messages" do
     field :content, :string
@@ -10,13 +11,13 @@ defmodule Chattr.Messages.Message do
     belongs_to :user, Chattr.Accounts.Users
 
     timestamps(type: :utc_datetime)
-    @timestamps_opts [type: :utc_datetime, updated_at: false]
+
   end
 
   @doc false
   def changeset(message, attrs) do
     message
-    |> cast(attrs, [:sent_time, :content])
-    |> validate_required([:sent_time, :content])
+    |> cast(attrs, [:content, :chat_id, :user_id])
+    |> validate_required([:content, :chat_id, :user_id])
   end
 end

@@ -9,12 +9,15 @@ defmodule ChattrWeb.MessageController do
       {:ok, message} ->
         conn
         |> put_status(:created)
-        |>json(message)
+        |> json(message)
 
       {:error, changeset} ->
+        errs = changeset.errors
+        |> Enum.map(&EncodeError.encode/1)
+
         conn
         |> put_status(:unprocessable_entity)
-        |>json(%{errors: changeset.errors})
+        |> json(%{errors: errs})
     end
   end
 

@@ -3,8 +3,10 @@ defmodule ChattrWeb.ChatController do
 
   alias Chattr.Chats
 
-  def create(conn, %{"chat" => chat_params}) do
-    case Chats.create_chat(chat_params) do
+  def create(conn, _) do
+    user_id = conn.assigns[:claims]["user_id"]
+
+    case Chats.create_chat(user_id) do
       {:ok, chat} ->
         conn
         |> put_status(:created)

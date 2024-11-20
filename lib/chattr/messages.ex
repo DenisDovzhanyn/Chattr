@@ -46,12 +46,13 @@ defmodule Chattr.Messages do
         case Chats.get_chat_by_user_and_chat_id(%{"user_id" => id, "chat_id" => chat_id}) do
 
          %UserChat{} ->
-            Repo.all(
+            messages = Repo.all(
             from x in Message,
             where: x.chat_id == ^chat_id,
             order_by: [desc: x.inserted_at],
             limit: ^String.to_integer(last_x_messages)
             )
+            {:ok, messages}
 
           nil -> {:unauthorized}
        end

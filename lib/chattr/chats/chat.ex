@@ -13,6 +13,5 @@ defmodule Chattr.Chats.Chat do
   def changeset(chat, attrs) do
     chat
     |> cast(attrs, [:last_msg_time])
-    |> validate_required([:last_msg_time])
   end
 end

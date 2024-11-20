@@ -4,11 +4,12 @@ defmodule Chattr.UserChat do
 
   @derive {Jason.Encoder, only: [:user_id, :chat_id]}
   @primary_key {:user_id, :integer, []}
+  @timestamps_opts [type: :utc_datetime, inserted_at: false, updated_at: false]
   
   schema "user_chats" do
 
     field :chat_id, :integer
-    @timestamps_opts [type: :utc_datetime, inserted_at: false, updated_at: false]
+
   end
 
   @doc false

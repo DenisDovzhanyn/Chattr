@@ -80,9 +80,14 @@ defmodule Chattr.Chats do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_chat(attrs \\ %{}) do
-    %Chat{}
-    |> Chat.changeset(attrs)
+  def create_chat(user_id) do
+
+    {_atom, chat} = %Chat{}
+      |> Chat.changeset(%{})
+      |> Repo.insert()
+
+    %UserChat{}
+    |> UserChat.changeset(%{user_id: user_id, chat_id: chat.id})
     |> Repo.insert()
   end
 
