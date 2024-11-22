@@ -4,6 +4,7 @@ defmodule Chattr.Accounts do
   """
 
   import Ecto.Query, warn: false
+  alias Chattr.UserKey
   alias Chattr.Repo
 
   alias Chattr.Accounts.Users
@@ -52,9 +53,27 @@ defmodule Chattr.Accounts do
 
   """
   def create_users(attrs \\ %{}) do
-    %Users{}
-    |> Users.changeset(attrs)
-    |> Repo.insert()
+     case %Users{}
+      |> Users.changeset(attrs)
+      |> Repo.insert() do
+
+      {:ok, user} ->
+
+        keys = Enum.map(1..3, fn _ ->
+          single_key = :crypto.strong_rand_bytes(32)
+          |> Base.url_encode64()
+
+          %UserKey{}
+          |> UserKey.changeset(%{"user_id" => user.id, "key" => single_key, "used" => false})
+          |> Repo.insert()
+
+          single_key
+        end)
+
+        {:ok, {user, keys}}
+
+      {:error, changeset} -> {:error, changeset}
+    end
   end
 
   def login_users(%{"username" => username, "password" => password}) do
@@ -71,6 +90,29 @@ defmodule Chattr.Accounts do
     end
 
   end
+
+
+  def login_one_time_key(%{"username" => username, "key" => key}) do
+    %Users{id: id} = get_users_by_username(username)
+
+    case Repo.get_by(UserKey, user_id: id, key: key) do
+      %UserKey{user_id: id, key: key, used: used} ->
+
+        if used != true do
+          Repo.update_all(
+            from(u in UserKey, where: u.user_id == ^id and u.key == ^key),
+            set: [used: true])
+
+          
+          {:ok, id}
+        else
+          {:error, "key already used"}
+        end
+
+      _ -> {:error, "key not found"}
+    end
+  end
+
 
   @doc """
   Updates a users.

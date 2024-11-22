@@ -7,4 +7,6 @@ defmodule EncodeError do
 
     %{error: error, reason: reduced}
   end
+
+
 end

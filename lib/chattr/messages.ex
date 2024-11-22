@@ -82,10 +82,6 @@ defmodule Chattr.Messages do
 
   """
   def create_message(attrs \\ %{}) do
-    IO.puts('hello im in here but wtf man ')
-    IO.inspect(attrs["user_id"])
-    IO.inspect(attrs["chat_id"])
-    IO.inspect(Chats.get_chat_by_user_and_chat_id(%{"user_id" => attrs["user_id"], "chat_id" => attrs["chat_id"]}))
     case Chats.get_chat_by_user_and_chat_id(%{"user_id" => attrs["user_id"], "chat_id" => attrs["chat_id"]}) do
     %UserChat{} ->
       %Message{}

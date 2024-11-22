@@ -16,6 +16,7 @@ defmodule ChattrWeb.Router do
 
     post "/signup", UserController, :create
     post "/login", UserController, :login
+    post "/login/key", UserController, :login_one_time_key
 
     pipe_through :authenticated
 

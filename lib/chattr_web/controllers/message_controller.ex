@@ -4,7 +4,7 @@ defmodule ChattrWeb.MessageController do
   alias ChattrWeb.AuthenticateJWT
   alias Chattr.Messages
 
-  def create(conn, %{"content" => content, "chat_id" => chat_id} = msg_params) do
+  def create(conn, %{"content" => _content, "chat_id" => _chat_id} = msg_params) do
     msg_params = Map.put(msg_params, "user_id", conn.assigns[:claims]["user_id"])
     case Messages.create_message(msg_params) do
       {:ok, message} ->
@@ -39,3 +39,8 @@ defmodule ChattrWeb.MessageController do
 
   end
 end
+
+### NEXT STEPS!
+# 1. ADD SSH/ MAKE IT SO THAT WHEN SOMEONE USES AN SSH THEY MUST CHANGE PASSWORD
+# 2. LET THEM CHANGE PASSWORD WITHOUT SSH BUT THEY MUST ENTER THE CORRECT PASSWORD TO CHANGE
+# 3. I DONT KNOW LOL

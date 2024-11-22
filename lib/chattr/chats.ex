@@ -92,8 +92,6 @@ defmodule Chattr.Chats do
     |> Repo.insert()
   end
 
-   ## REMEMBER TO TEST THJIS BRO PLEASE I HAVENT TESTED PLEASE REMEMBER TO TEST THIS TEST TEST
-   ## TEST TEST TEST ETEST TEST TEST TES TEST TEST TEST TEST TEST TEST ETS TEST
   def add_user(%{"user_id" => user_id, "chat_id" => chat_id}, inviter_id) do
     case get_chat_by_user_and_chat_id(%{"user_id" => inviter_id, "chat_id" => chat_id}) do
       %UserChat{} ->
