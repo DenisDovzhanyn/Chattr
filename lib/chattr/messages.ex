@@ -39,10 +39,12 @@ defmodule Chattr.Messages do
 
   """
   def get_message_by(type_of_id, id) do
+    IO.puts("im in here")
+    IO.inspect(type_of_id)
     case type_of_id do
 
       %{"chat_id" => chat_id, "last_x_messages" => last_x_messages} ->
-
+        IO.puts("im in here now too")
         case Chats.get_chat_by_user_and_chat_id(%{"user_id" => id, "chat_id" => chat_id}) do
 
          %UserChat{} ->

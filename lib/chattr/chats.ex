@@ -6,7 +6,7 @@ defmodule Chattr.Chats do
   import Ecto.Query, warn: false
   alias ChattrWeb.AuthenticateJWT
   alias Chattr.Repo
-
+  alias Chattr.Messages.Message
   alias Chattr.Chats.Chat
   alias Chattr.UserChat
 
@@ -54,7 +54,7 @@ defmodule Chattr.Chats do
       %{"user_id" => user_id} ->
 
         Repo.all(from uc in UserChat,
-          join: c in Chat, on: c.chat_id == uc.id,
+          join: c in Chat, on: c.id == uc.chat_id,
           where: uc.user_id == ^user_id)
 
       _ ->
@@ -88,8 +88,8 @@ defmodule Chattr.Chats do
       |> Repo.insert()
 
     %UserChat{}
-    |> UserChat.changeset(%{user_id: user_id, chat_id: chat.id})
-    |> Repo.insert()
+      |> UserChat.changeset(%{user_id: user_id, chat_id: chat.id})
+      |> Repo.insert()
   end
 
   def add_user(%{"user_id" => user_id, "chat_id" => chat_id}, inviter_id) do
@@ -102,6 +102,29 @@ defmodule Chattr.Chats do
       nil -> nil
     end
 
+  end
+
+  def remove_user (%{"user_id" => user_id, "chat_id" => chat_id}) do
+    case get_chat_by_user_and_chat_id(%{"user_id" => user_id, "chat_id" => chat_id}) do
+
+      %UserChat{} = user_chat ->
+        response = Repo.delete(user_chat)
+        users_in_chat = length(Repo.all(from chat in UserChat, where: chat.chat_id == ^chat_id))
+
+        if users_in_chat > 0 do
+          response
+        else
+          chat = Repo.get(Chat, chat_id)
+          chat
+          |> Repo.delete()
+
+          Repo.delete_all(from message in Message, where: message.chat_id == ^chat_id)
+          response
+        end
+
+      nil ->
+        nil
+    end
   end
 
   @doc """
