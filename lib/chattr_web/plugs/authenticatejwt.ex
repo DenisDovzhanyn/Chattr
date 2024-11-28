@@ -16,8 +16,7 @@ defmodule ChattrWeb.AuthenticateJWT do
     end
   end
 
-  defp verify_token(token) do
-    IO.puts(token)
+  def verify_token(token) do
     Auth.verify_and_validate(token)
   end
 

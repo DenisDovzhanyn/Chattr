@@ -103,7 +103,7 @@ defmodule Chattr.Accounts do
             from(u in UserKey, where: u.user_id == ^id and u.key == ^key),
             set: [used: true])
 
-          
+
           {:ok, id}
         else
           {:error, "key already used"}
