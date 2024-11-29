@@ -16,11 +16,18 @@ defmodule ChattrWeb.ChatChannel do
 
   def handle_in("new_msg", %{"content" => content}, socket) do
     case Messages.create_message(%{"user_id" => socket.assigns["user_id"], "chat_id" => socket.assigns["chat_id"], "content" => content}) do
-      %Message{} ->
+      {:ok, %Message{}} ->
         broadcast!(socket, "new_msg", %{"content" => content})
         {:noreply, socket}
-        
-      _ -> {:error, %{"reason" => "unauthorized"}}
+
+      {:unauthorized} ->  # Handle the unauthorized error properly
+        push(socket, "error", %{"reason" => "unauthorized"})
+        {:noreply, socket}
+
+      _ ->  # Handle any other errors
+        push(socket, "error", %{"reason" => "unknown_error"})
+        {:noreply, socket}
+
     end
   end
 end
