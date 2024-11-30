@@ -17,7 +17,8 @@ defmodule Chattr.Application do
       # Start a worker by calling: Chattr.Worker.start_link(arg)
       # {Chattr.Worker, arg},
       # Start to serve requests, typically the last entry
-      ChattrWeb.Endpoint
+      ChattrWeb.Endpoint,
+      ChattrWeb.ConnectedUsers
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
