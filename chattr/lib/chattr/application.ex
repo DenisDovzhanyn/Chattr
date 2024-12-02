@@ -18,7 +18,8 @@ defmodule Chattr.Application do
       # {Chattr.Worker, arg},
       # Start to serve requests, typically the last entry
       ChattrWeb.Endpoint,
-      ChattrWeb.ConnectedUsers
+      ChattrWeb.ConnectedUsers,
+      ChattrWeb.OfflineKeyQueue
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

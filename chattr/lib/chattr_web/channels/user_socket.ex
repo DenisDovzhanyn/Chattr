@@ -1,4 +1,5 @@
 defmodule ChattrWeb.UserSocket do
+  alias ChattrWeb.ConnectedUsers
   alias ChattrWeb.AuthenticateJWT
   use Phoenix.Socket
 
@@ -8,6 +9,8 @@ defmodule ChattrWeb.UserSocket do
   def connect(%{"token" => token}, socket, _connect_info) do
     case AuthenticateJWT.verify_token(token) do
       {:ok, %{"user_id" => user_id}} ->
+        ConnectedUsers.add_user(user_id, socket)
+       
         {:ok, assign(socket, "user_id", user_id)}
 
       {:error, reason} ->
@@ -15,7 +18,8 @@ defmodule ChattrWeb.UserSocket do
     end
   end
 
-  
+
+
 
   # Socket IDs are topics that allow you to identify all sockets for a given user:
   #
