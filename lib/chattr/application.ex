@@ -7,6 +7,7 @@ defmodule Chattr.Application do
 
   @impl true
   def start(_type, _args) do
+    redix_config = Application.get_env(:chattr, ChattrWeb.Redix)
     children = [
       ChattrWeb.Telemetry,
       Chattr.Repo,
@@ -14,12 +15,11 @@ defmodule Chattr.Application do
       {Phoenix.PubSub, name: Chattr.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: Chattr.Finch},
+      {Redix, host: redix_config[:host], port: redix_config[:port], password: redix_config[:password], name: :redix},
       # Start a worker by calling: Chattr.Worker.start_link(arg)
       # {Chattr.Worker, arg},
       # Start to serve requests, typically the last entry
       ChattrWeb.Endpoint,
-      ChattrWeb.ConnectedUsers,
-      ChattrWeb.OfflineKeyQueue
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

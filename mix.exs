@@ -46,7 +46,8 @@ defmodule Chattr.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:pbkdf2_elixir, "~> 2.3"},
-      {:joken, "~> 2.6"}
+      {:joken, "~> 2.6"},
+      {:redix, "~> 1.5"}
     ]
   end
 

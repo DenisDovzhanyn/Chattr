@@ -26,6 +26,8 @@ defmodule ChattrWeb.Router do
     get "/chats", ChatController, :show
     post "/chats/add_user", ChatController, :add_user
     delete "/chats/remove_user", ChatController, :leave_chat
+    get "/chats/key", KeyController, :get_key
+    post "/chats/key", KeyController, :put_key
   end
 
 
