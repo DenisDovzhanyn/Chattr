@@ -9,7 +9,7 @@ defmodule ChattrWeb.KeyController do
     def put_key(conn, %{"recipient" => recipient, "key" => key, "chat_id" => chat_id}) do
       case Chats.get_chat_by_user_and_chat_id(%{"user_id" => recipient, "chat_id" => chat_id}) do
         %UserChat{} ->
-          case Redix.command(:redix, ["SET", "#{chat_id}:#{recipient}", key]) do
+          case Redix.command(:redix, ["SET", "#{chat_id}:#{recipient}", key, "EX", "604800"]) do
             {:ok, _} ->
               conn
               |> put_status(:ok)

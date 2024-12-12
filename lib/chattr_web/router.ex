@@ -20,14 +20,13 @@ defmodule ChattrWeb.Router do
 
     pipe_through :authenticated
 
-    resources "/messages", MessageController, only: [:create]
-    get "/messages", MessageController, :show
+    get "/chats/messages", MessageController, :show
     resources "/chats", ChatController, only: [:create]
     get "/chats", ChatController, :show
     post "/chats/add_user", ChatController, :add_user
     delete "/chats/remove_user", ChatController, :leave_chat
-    get "/chats/key", KeyController, :get_key
-    post "/chats/key", KeyController, :put_key
+    get "/keys", KeyController, :get_key
+    post "/keys", KeyController, :put_key
   end
 
 
