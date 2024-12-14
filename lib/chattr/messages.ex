@@ -11,30 +11,6 @@ defmodule Chattr.Messages do
 
   alias Chattr.Messages.Message
 
-  @doc """
-  Returns the list of messages.
-
-  ## Examples
-
-      iex> list_messages()
-      [%Message{}, ...]
-
-  """
-
-  @doc """
-  Gets a single message.
-
-  Raises `Ecto.NoResultsError` if the Message does not exist.
-
-  ## Examples
-
-      iex> get_message!(123)
-      %Message{}
-
-      iex> get_message!(456)
-      ** (Ecto.NoResultsError)
-
-  """
   def get_message_by(type_of_id, id) do
     case type_of_id do
 
@@ -62,60 +38,6 @@ defmodule Chattr.Messages do
 
 
 
-
-  @doc """
-  Creates a message.
-
-  ## Examples
-
-      iex> create_message(%{field: value})
-      {:ok, %Message{}}
-
-      iex> create_message(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_message(attrs \\ %{}) do
-    case Chats.get_chat_by_user_and_chat_id(%{"user_id" => attrs["user_id"], "chat_id" => attrs["chat_id"]}) do
-    %UserChat{} ->
-      %Message{}
-      |> Message.changeset(attrs)
-      |> Repo.insert()
-
-    nil -> {:unauthorized}
-    end
-  end
-
-  @doc """
-  Updates a message.
-
-  ## Examples
-
-      iex> update_message(message, %{field: new_value})
-      {:ok, %Message{}}
-
-      iex> update_message(message, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_message(%Message{} = message, attrs) do
-    message
-    |> Message.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a message.
-
-  ## Examples
-
-      iex> delete_message(message)
-      {:ok, %Message{}}
-
-      iex> delete_message(message)
-      {:error, %Ecto.Changeset{}}
-
-  """
   def delete_message(%Message{} = message) do
     Repo.delete(message)
   end
