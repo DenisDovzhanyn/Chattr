@@ -114,6 +114,29 @@ defmodule Chattr.Accounts do
   end
 
 
+  def set_random_chat(%{"is_finding_random_chat" => is_looking, "user_id" => user_id}) do
+    user = get_users!(user_id)
+    user
+    |> Users.changeset_for_random_chat(%{"find_random_chat" => is_looking})
+    |> Repo.update()
+  end
+
+  def get_one_user_random_chat() do
+    query = from user in Users,
+          where: user.find_random_chat == true,
+          limit: 1 ## may add a lock here but i need to read a bit more on that
+
+    case Repo.one(query) do
+      nil ->
+        {:error, :no_available_users}
+
+      user ->
+        set_random_chat(%{"is_finding_random_chat" => false, "user_id" => user[:user_id]})
+        {:ok, user[:user_id]}
+    end
+  end
+
+
   @doc """
   Updates a users.
 

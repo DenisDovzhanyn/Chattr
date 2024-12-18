@@ -3,6 +3,7 @@ defmodule ChattrWeb.ChatController do
 
   alias ChattrWeb.AuthenticateJWT
   alias Chattr.Chats
+  alias Chattr.Accounts
 
   def create(conn, _) do
     user_id = conn.assigns[:claims]["user_id"]
@@ -51,6 +52,37 @@ defmodule ChattrWeb.ChatController do
         conn
         |> AuthenticateJWT.not_authorized()
     end
+
+  end
+
+  def set_find_random_chat(conn, %{"is_finding_random_chat" => is_looking}) do
+    user_id = conn.assigns[:claims]["user_id"]
+    if is_looking do
+      case Accounts.get_one_user_random_chat() do
+        {:error, :no_available_users} ->
+
+          Accounts.set_random_chat(%{"is_finding_random_chat" => is_looking, "user_id" => user_id})
+
+          conn
+          |> put_status(:ok)
+          |> json("Currently no available users, will continue looking")
+
+        {:ok, id} ->
+          chat = Chats.create_chat(user_id)
+          Chats.add_user(%{"user_id" => id, "chat_id" => chat[:id]}, user_id)
+
+          conn
+          |> put_status(:ok)
+          |> json(chat)
+      end
+    else
+      Accounts.set_random_chat(%{"is_finding_random_chat" => is_looking, "user_id" => user_id})
+
+      conn
+      |> put_status(:ok)
+      |> json("Set to not looking")
+    end
+
 
   end
 

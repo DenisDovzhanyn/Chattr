@@ -30,6 +30,7 @@ defmodule ChattrWeb.KeyController do
 
       case Redix.command(:redix, ["GET", "#{chat_id}:#{user_id}"]) do
         {:ok, key} ->
+          Redix.command(:redix, ["DELETE", "#{chat_id}:#{user_id}"])
           conn
           |> put_status(:ok)
           |> json(key)

@@ -9,6 +9,7 @@ defmodule Chattr.Accounts.Users do
     field :password, :string
     field :temp_password, :string, virtual: true
     field :display_name, :string
+    field :find_random_chat, :boolean
 
     many_to_many :chats, Chattr.Chats.Chat, join_through: "user_chats"
 
@@ -28,6 +29,11 @@ defmodule Chattr.Accounts.Users do
     users
     |> cast(attrs, [:display_name])
     |> validate_required([:display_name])
+  end
+
+  def changeset_for_random_chat(user, attrs) do
+    user
+    |> cast(attrs, [:find_random_chat])
   end
 
   defp hash_password(changeset) do

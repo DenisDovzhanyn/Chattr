@@ -27,6 +27,7 @@ defmodule ChattrWeb.Router do
     delete "/chats/remove_user", ChatController, :leave_chat
     get "/keys", KeyController, :get_key
     post "/keys", KeyController, :put_key
+    post "/chats/find_random", ChatController, :set_find_random_chat
   end
 
 

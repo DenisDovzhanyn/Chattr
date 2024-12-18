@@ -59,4 +59,6 @@ defmodule ChattrWeb.UserController do
         |> json(text)
     end
   end
+
+  
 end
