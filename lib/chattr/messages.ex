@@ -30,6 +30,18 @@ defmodule Chattr.Messages do
           nil -> {:unauthorized}
        end
 
+      %{"chat_id" => chat_id, "since_message_id" => since_message_id} ->
+        case Chats.get_chat_by_user_and_chat_id(%{"user_id" => id, "chat_id" => chat_id}) do
+          %UserChat{} ->
+            messages = Repo.all(
+              from x in Message,
+              where: x.chat_id == ^chat_id and x.id == ^since_message_id,
+              order_by: [desc: x.inserted_at])
+            {:ok, messages}
+
+          nil -> {:unauthorized}
+        end
+
       _ ->
         []
     end
