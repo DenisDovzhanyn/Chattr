@@ -95,6 +95,9 @@ defmodule Chattr.Accounts do
   def login_one_time_key(%{"username" => username, "key" => key}) do
     %Users{id: id} = get_users_by_username(username)
 
+    ## I NEED TO MAKE IT SO THAT WHEN A USER USES A ONE TIME KEY, THEY MUST RESET THEIR PASSWORD,
+    ## DO I ADD A FIELD IN THE DATABASE SCHEMA WHICH THE CLIENT WILL CHECK UPON LOGIN AND REDIRECT THEM TO RESET?
+    
     case Repo.get_by(UserKey, user_id: id, key: key) do
       %UserKey{user_id: id, key: key, used: used} ->
 
