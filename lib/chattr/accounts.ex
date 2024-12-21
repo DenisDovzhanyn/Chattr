@@ -97,7 +97,7 @@ defmodule Chattr.Accounts do
 
     ## I NEED TO MAKE IT SO THAT WHEN A USER USES A ONE TIME KEY, THEY MUST RESET THEIR PASSWORD,
     ## DO I ADD A FIELD IN THE DATABASE SCHEMA WHICH THE CLIENT WILL CHECK UPON LOGIN AND REDIRECT THEM TO RESET?
-    
+
     case Repo.get_by(UserKey, user_id: id, key: key) do
       %UserKey{user_id: id, key: key, used: used} ->
 
@@ -137,6 +137,13 @@ defmodule Chattr.Accounts do
         set_random_chat(%{"is_finding_random_chat" => false, "user_id" => user[:user_id]})
         {:ok, user[:user_id]}
     end
+  end
+
+  def update_password(%{"user_id" => user_id, "password" => password}) do
+    user = get_users!(user_id)
+    user
+    |> Users.changeset_for_password({"password" => password})
+    |> Repo.update()
   end
 
 

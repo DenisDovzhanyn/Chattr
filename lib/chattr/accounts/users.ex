@@ -36,6 +36,13 @@ defmodule Chattr.Accounts.Users do
     |> cast(attrs, [:find_random_chat])
   end
 
+  def changeset_for_password(user, attrs) do
+    user
+    |> cast(attrs, [:password])
+    |> validate_required([:password])
+    |> hash_password()
+  end
+
   defp hash_password(changeset) do
     password =
       changeset
