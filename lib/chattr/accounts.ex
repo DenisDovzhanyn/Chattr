@@ -142,7 +142,7 @@ defmodule Chattr.Accounts do
   def update_password(%{"user_id" => user_id, "password" => password}) do
     user = get_users!(user_id)
     user
-    |> Users.changeset_for_password({"password" => password})
+    |> Users.changeset_for_password(%{"password" => password})
     |> Repo.update()
   end
 
