@@ -35,7 +35,7 @@ defmodule ChattrWeb.UserController do
 
         conn
         |> put_status(:ok)
-        |> json(jwt_token)
+        |> json(%{"Jwt" => jwt_token})
 
       {:error, text} ->
         conn
@@ -60,5 +60,5 @@ defmodule ChattrWeb.UserController do
     end
   end
 
-  
+
 end

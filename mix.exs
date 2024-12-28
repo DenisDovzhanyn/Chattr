@@ -47,7 +47,8 @@ defmodule Chattr.MixProject do
       {:bandit, "~> 1.5"},
       {:pbkdf2_elixir, "~> 2.3"},
       {:joken, "~> 2.6"},
-      {:redix, "~> 1.5"}
+      {:redix, "~> 1.5"},
+      {:corsica, "~> 1.1"}
     ]
   end
 

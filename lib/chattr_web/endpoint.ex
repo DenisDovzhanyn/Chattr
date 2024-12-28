@@ -26,6 +26,11 @@ defmodule ChattrWeb.Endpoint do
     gzip: false,
     only: ChattrWeb.static_paths()
 
+
+  plug Corsica,
+    origins: "*",
+    allow_methods: ["GET", "POST", "OPTIONS"],
+    allow_headers: ["content-type", "authorization"]
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
