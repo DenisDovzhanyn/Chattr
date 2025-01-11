@@ -25,7 +25,7 @@ defmodule ChattrWeb.UserController do
 
   def update_display_name(conn, _params) do
     user = Accounts.update_users_display_name(conn.params)
-    json(conn, user)
+    json(conn, %{user: user})
   end
 
   def login(conn, %{"username" => _username, "password" => _password} = info) do
@@ -51,12 +51,12 @@ defmodule ChattrWeb.UserController do
 
         conn
         |> put_status(:ok)
-        |> json(jwt_token)
+        |> json(%{"Jwt" => jwt_token})
 
       {:error, text} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> json(text)
+        |> json(%{error: text})
     end
   end
 
