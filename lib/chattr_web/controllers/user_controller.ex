@@ -39,7 +39,7 @@ defmodule ChattrWeb.UserController do
 
       {:error, text} ->
         conn
-        |> put_status(:unprocessable_entity)
+        |> put_status(:unauthorized)
         |> json(%{error: text})
     end
   end

@@ -83,10 +83,10 @@ defmodule Chattr.Accounts do
 
           {:ok, "logged in", id}
         else
-          {:error, "Username or Password not found, try again"}
+          {:error, "Username or password not found, try again"}
         end
 
-      _ -> {:error, "Username or Password not found, try again"}
+      _ -> {:error, "Username or password not found, try again"}
     end
 
   end
@@ -112,7 +112,7 @@ defmodule Chattr.Accounts do
           {:error, "key already used"}
         end
 
-      _ -> {:error, "Username or Key not found, try again"}
+      _ -> {:error, "Username or key not found, try again"}
     end
   end
 
