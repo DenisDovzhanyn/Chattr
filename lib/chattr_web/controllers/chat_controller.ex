@@ -73,7 +73,7 @@ defmodule ChattrWeb.ChatController do
 
           conn
           |> put_status(:ok)
-          |> json(chat)
+          |> json(%{chat: chat})
       end
     else
       Accounts.set_random_chat(%{"is_finding_random_chat" => is_looking, "user_id" => user_id})
@@ -88,6 +88,6 @@ defmodule ChattrWeb.ChatController do
 
   def show(conn, _params) do
     chat = Chats.get_chat_by_user_id(%{"user_id" => conn.assigns[:claims]["user_id"]})
-    json(conn, chat)
+    json(conn, %{chats: chat})
   end
 end

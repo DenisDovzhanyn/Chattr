@@ -17,7 +17,7 @@ defmodule ChattrWeb.KeyController do
             {:error, _} ->
               conn
               |> put_status(:unprocessable_entity)
-              |> json("error")
+              |> json(%{error: "error sending key"})
           end
         nil ->
           conn
@@ -38,7 +38,7 @@ defmodule ChattrWeb.KeyController do
         {:error, _} ->
           conn
           |> put_status(:not_found)
-          |> json("not found")
+          |> json(%{error: "no key found for this chat"})
       end
     end
 end

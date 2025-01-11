@@ -9,7 +9,7 @@ defmodule ChattrWeb.MessageController do
       {:ok, messages} ->
         conn
         |> put_status(:ok)
-        |> json(messages)
+        |> json(%{messages: messages})
 
       _ ->
         AuthenticateJWT.not_authorized(conn)

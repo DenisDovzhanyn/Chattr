@@ -40,7 +40,7 @@ defmodule ChattrWeb.UserController do
       {:error, text} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> json(text)
+        |> json(%{error: text})
     end
   end
 
