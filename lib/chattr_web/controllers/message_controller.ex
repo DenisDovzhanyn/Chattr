@@ -12,7 +12,7 @@ defmodule ChattrWeb.MessageController do
         |> json(%{messages: messages})
 
       _ ->
-        AuthenticateJWT.not_authorized(conn)
+        AuthenticateJWT.forbidden(conn)
     end
 
   end

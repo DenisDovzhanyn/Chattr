@@ -27,6 +27,12 @@ defmodule ChattrWeb.AuthenticateJWT do
     |> halt()
   end
 
+  def forbidden(conn) do
+    conn
+    |> put_status(:forbidden)
+    |> json(%{error: "Forbidden"})
+  end
+
   def not_authorized(conn) do
     conn
     |> put_status(:unauthorized)

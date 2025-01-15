@@ -12,7 +12,7 @@ defmodule ChattrWeb.ChatController do
       {:ok, chat} ->
         conn
         |> put_status(:created)
-        |> json(chat)
+        |> json(%{chat: chat})
 
       {:error, changeset} ->
         conn
@@ -27,7 +27,7 @@ defmodule ChattrWeb.ChatController do
       {:ok, chat} ->
         conn
         |> put_status(:ok)
-        |> json(chat)
+        |> json(%{chat: chat})
 
       {:error, changeset} ->
         conn
@@ -36,7 +36,7 @@ defmodule ChattrWeb.ChatController do
 
       _ ->
         conn
-        |> AuthenticateJWT.not_authorized()
+        |> AuthenticateJWT.forbidden()
     end
   end
 
@@ -50,7 +50,7 @@ defmodule ChattrWeb.ChatController do
 
       nil ->
         conn
-        |> AuthenticateJWT.not_authorized()
+        |> AuthenticateJWT.forbidden()
     end
 
   end

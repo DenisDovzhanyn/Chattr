@@ -10,7 +10,7 @@ defmodule ChattrWeb.UserController do
         jwt_token = Auth.generate_and_sign!(%{"user_id" => id})
         conn
         |> put_status(:created)
-        |> json([jwt_token, keys])
+        |> json(%{Jwt: jwt_token, keys: keys})
 
       {:error, changeset} ->
 
@@ -55,7 +55,7 @@ defmodule ChattrWeb.UserController do
 
       {:error, text} ->
         conn
-        |> put_status(:unprocessable_entity)
+        |> put_status(:unauthorized)
         |> json(%{error: text})
     end
   end
