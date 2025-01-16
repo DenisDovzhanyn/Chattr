@@ -7,7 +7,7 @@ defmodule ChattrWeb.AuthenticateJWT do
     case get_req_header(conn, "authorization") do
       ["Bearer " <> token] ->
         case verify_token(token) do
-          {:ok, claims} -> assign(conn, :claims, claims)
+          {:ok, %{"token_type" => "access"} = claims} -> assign(conn, :claims, claims)
 
           _ -> unauthorized(conn)
 
