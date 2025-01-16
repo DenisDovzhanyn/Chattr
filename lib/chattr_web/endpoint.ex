@@ -20,17 +20,20 @@ defmodule ChattrWeb.Endpoint do
   #
   # You should set gzip to true if you are running phx.digest
   # when deploying your static files in production.
+
+  plug Corsica,
+    origins: ["http://localhost:5173"],
+    allow_methods: ["GET", "POST", "OPTIONS"],
+    allow_headers: ["content-type", "authorization"],
+    allow_credentials: true
+
+
   plug Plug.Static,
     at: "/",
     from: :chattr,
     gzip: false,
     only: ChattrWeb.static_paths()
 
-
-  plug Corsica,
-    origins: "*",
-    allow_methods: ["GET", "POST", "OPTIONS"],
-    allow_headers: ["content-type", "authorization"]
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
