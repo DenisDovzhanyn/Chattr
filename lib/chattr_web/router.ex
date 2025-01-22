@@ -18,8 +18,9 @@ defmodule ChattrWeb.Router do
     post "/login", UserController, :login
     post "/login/key", UserController, :login_one_time_key
 
-    pipe_through :authenticated
     get "/auth/refresh", RefreshController, :refresh_access_token
+    
+    pipe_through :authenticated
     get "/chats/messages", MessageController, :show
     resources "/chats", ChatController, only: [:create]
     get "/chats", ChatController, :show

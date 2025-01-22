@@ -4,14 +4,14 @@ defmodule ChattrWeb.RefreshController do
 
 
 
-  def refresh_access_token(conn, %{"refresh_token" => refresh_token}) do
+  def refresh_access_token(%{cookies: %{"refresh_token" => refresh_token}} = conn, _) do
     case Auth.verify_and_validate(refresh_token) do
       {:ok, %{"token_type" => "refresh"} = claims} ->
         case Redix.command(:redix, ["GET", "refresh_token:#{claims["user_id"]}"]) do
           {:ok, token} ->
             if token == refresh_token do
               new_token =
-                Auth.generate_and_sign(
+                Auth.generate_and_sign!(
                 %{"user_id" => claims["user_id"],
                  "exp" => Joken.current_time() + 900,
                  "token_type" => "access"})
