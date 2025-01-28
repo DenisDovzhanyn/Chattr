@@ -3,7 +3,6 @@ defmodule ChattrWeb.RefreshController do
   use ChattrWeb, :controller
 
 
-
   def refresh_access_token(%{cookies: %{"refresh_token" => refresh_token}} = conn, _) do
     case Auth.verify_and_validate(refresh_token) do
       {:ok, %{"token_type" => "refresh"} = claims} ->
@@ -30,4 +29,8 @@ defmodule ChattrWeb.RefreshController do
     end
 
   end
+
+
+  def refresh_access_token(conn, _), do: AuthenticateJWT.not_authorized(conn)
+
 end

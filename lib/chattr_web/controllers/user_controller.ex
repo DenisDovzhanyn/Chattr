@@ -70,17 +70,14 @@ defmodule ChattrWeb.UserController do
       "token_type" => "refresh"})
 
     Redix.command(:redix, ["SET", "refresh_token:#{id}", refresh_token, "EX", "604800"])
-    if keepLoggedIn do
-      conn
-      |> put_resp_cookie("refresh_token", refresh_token, http_only: true, secure: true, same_site: "strict", max_age: one_week)
-      |> put_status(:ok)
-      |> json(%{"access_token" => access_token})
-    else
-      conn
-      |> put_resp_cookie("refresh_token", refresh_token, http_only: true, secure: true, same_site: "strict")
-      |> put_status(:ok)
-      |> json(%{"access_token" => access_token})
-    end
+
+    token_max_age = if keepLoggedIn, do: one_week, else: nil
+
+    conn
+    |> put_resp_cookie("refresh_token", refresh_token, http_only: true, secure: true, same_site: "strict", max_age: token_max_age)
+    |> put_status(:ok)
+    |> json(%{"access_token" => access_token})
+
   end
 
 
