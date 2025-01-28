@@ -30,11 +30,11 @@ defmodule ChattrWeb.UserController do
     json(conn, %{user: user})
   end
 
-  def login(conn, %{"username" => _username, "password" => _password} = info) do
+  def login(conn, %{"username" => username, "password" => password, "keepLoggedIn" => keepLoggedIn}) do
 
-    case Accounts.login_users(info) do
+    case Accounts.login_users(%{"username" => username, "password" => password}) do
       {:ok, _, id} ->
-        login_helper(conn, id)
+        login_helper(conn, id, keepLoggedIn)
 
       {:error, text} ->
         conn
@@ -43,12 +43,12 @@ defmodule ChattrWeb.UserController do
     end
   end
 
-  def login_one_time_key(conn, %{"username" => _username, "key" => _key} = info) do
+  def login_one_time_key(conn, %{"username" => username, "key" => key, "keepLoggedIn" => keepLoggedIn}) do
 
 
-    case Accounts.login_one_time_key(info) do
+    case Accounts.login_one_time_key(%{"username" => username, "key" => key}) do
       {:ok, id} ->
-        login_helper(conn, id)
+        login_helper(conn, id, keepLoggedIn)
 
       {:error, text} ->
         conn
@@ -58,10 +58,9 @@ defmodule ChattrWeb.UserController do
   end
 
 
-  defp login_helper(conn, id) do
+  defp login_helper(conn, id, keepLoggedIn) do
     fifteen_minutes = 900
     one_week = 604800
-
     access_token = Auth.generate_and_sign!(%{"user_id" => id,
       "exp" => Joken.current_time() + fifteen_minutes,
       "token_type" => "access"})
@@ -71,11 +70,17 @@ defmodule ChattrWeb.UserController do
       "token_type" => "refresh"})
 
     Redix.command(:redix, ["SET", "refresh_token:#{id}", refresh_token, "EX", "604800"])
-
-    conn
-    |> put_resp_cookie("refresh_token", refresh_token, http_only: true, secure: true, same_site: "strict", max_age: one_week)
-    |> put_status(:ok)
-    |> json(%{"access_token" => access_token})
+    if keepLoggedIn do
+      conn
+      |> put_resp_cookie("refresh_token", refresh_token, http_only: true, secure: true, same_site: "strict", max_age: one_week)
+      |> put_status(:ok)
+      |> json(%{"access_token" => access_token})
+    else
+      conn
+      |> put_resp_cookie("refresh_token", refresh_token, http_only: true, secure: true, same_site: "strict")
+      |> put_status(:ok)
+      |> json(%{"access_token" => access_token})
+    end
   end
 
 
