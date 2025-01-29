@@ -88,6 +88,7 @@ defmodule ChattrWeb.ChatController do
 
   def show(conn, _params) do
     chat = Chats.get_chat_by_user_id(%{"user_id" => conn.assigns[:claims]["user_id"]})
+    
     json(conn, %{chats: chat})
   end
 end

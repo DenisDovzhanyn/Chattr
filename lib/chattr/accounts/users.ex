@@ -2,7 +2,7 @@ defmodule Chattr.Accounts.Users do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Jason.Encoder, only: [:username, :display_name, :id]}
+  @derive {Jason.Encoder, only: [:display_name, :id]}
 
   schema "users" do
     field :username, :string
@@ -11,7 +11,7 @@ defmodule Chattr.Accounts.Users do
     field :display_name, :string
     field :find_random_chat, :boolean
 
-    many_to_many :chats, Chattr.Chats.Chat, join_through: "user_chats"
+    many_to_many :chats, Chattr.Chats.Chat, join_through: "user_chats", join_keys: [user_id: :id, chat_id: :id]
 
     @timestamps_opts [type: :utc_datetime, inserted_at: false, updated_at: false]
   end

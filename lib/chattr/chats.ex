@@ -52,16 +52,28 @@ defmodule Chattr.Chats do
           limit: ^String.to_integer(last_x_chats))
 
       %{"user_id" => user_id} ->
-
-        Repo.all(from uc in UserChat,
-          join: c in Chat, on: c.id == uc.chat_id,
-          where: uc.user_id == ^user_id)
+        # god i hate ecto so much
+        Repo.all(
+          from c in Chattr.Chats.Chat,
+          join: uc in Chattr.UserChat, on: uc.chat_id == c.id,
+          join: u in Chattr.Accounts.Users, on: uc.user_id == u.id,
+          where: uc.user_id == ^user_id,
+          preload: [:users]
+        )
 
       _ ->
 
         []
     end
 
+  end
+
+  def get_all_users_by_chat_id(chat_id) do
+    Repo.all(from uc in UserChat,
+      join: u in assoc(uc, :user),
+      where: uc.chat_id == ^chat_id,
+      select: %{user_id: u.id, display_name: u.display_name}
+    )
   end
 
   def get_chat_by_user_and_chat_id(%{"user_id" => user_id, "chat_id" => chat_id}) do
