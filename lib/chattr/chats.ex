@@ -58,6 +58,7 @@ defmodule Chattr.Chats do
           join: uc in Chattr.UserChat, on: uc.chat_id == c.id,
           join: u in Chattr.Accounts.Users, on: uc.user_id == u.id,
           where: uc.user_id == ^user_id,
+          order_by: [desc: c.last_msg_time],
           preload: [:users]
         )
 
