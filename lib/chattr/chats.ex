@@ -103,6 +103,8 @@ defmodule Chattr.Chats do
     %UserChat{}
       |> UserChat.changeset(%{user_id: user_id, chat_id: chat.id})
       |> Repo.insert()
+
+      chat
   end
 
   def add_user(%{"user_id" => user_id, "chat_id" => chat_id}, inviter_id) do
