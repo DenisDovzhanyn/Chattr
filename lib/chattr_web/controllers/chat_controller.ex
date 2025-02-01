@@ -5,10 +5,10 @@ defmodule ChattrWeb.ChatController do
   alias Chattr.Chats
   alias Chattr.Accounts
 
-  def create(conn, _) do
+  def create(conn, %{"chat_name" => chat_name}) do
     user_id = conn.assigns[:claims]["user_id"]
 
-    case Chats.create_chat(user_id) do
+    case Chats.create_chat(%{"user_id" => user_id, "chat_name" => chat_name}) do
       {:ok, chat} ->
         conn
         |> put_status(:created)
@@ -88,7 +88,8 @@ defmodule ChattrWeb.ChatController do
 
   def show(conn, _params) do
     chat = Chats.get_chat_by_user_id(%{"user_id" => conn.assigns[:claims]["user_id"]})
-    
-    json(conn, %{chats: chat})
+    conn
+    |> json( %{chats: chat})
+
   end
 end

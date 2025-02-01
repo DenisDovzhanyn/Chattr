@@ -93,10 +93,10 @@ defmodule Chattr.Chats do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_chat(user_id) do
+  def create_chat(%{"user_id" => user_id, "chat_name" => chat_name}) do
 
     {_atom, chat} = %Chat{}
-      |> Chat.changeset(%{})
+      |> Chat.changeset(%{last_msg_time: DateTime.utc_now() |> Calendar.strftime("%Y-%m-%d %H:%M:%S") ,chat_name: chat_name})
       |> Repo.insert()
 
     %UserChat{}
