@@ -12,7 +12,7 @@ defmodule ChattrWeb.ChatController do
       {:ok, chat} ->
         conn
         |> put_status(:created)
-        |> json(%{chat: chat})
+        |> json(%{chats: chat})
 
       {:error, changeset} ->
         conn

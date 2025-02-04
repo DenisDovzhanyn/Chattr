@@ -96,7 +96,7 @@ defmodule Chattr.Chats do
   """
   def create_chat(%{"user_id" => user_id, "chat_name" => chat_name}) do
 
-    {_atom, chat} = %Chat{}
+    {atom, chat} = %Chat{}
       |> Chat.changeset(%{last_msg_time: DateTime.utc_now() |> Calendar.strftime("%Y-%m-%d %H:%M:%S") ,chat_name: chat_name})
       |> Repo.insert()
 
@@ -104,7 +104,8 @@ defmodule Chattr.Chats do
       |> UserChat.changeset(%{user_id: user_id, chat_id: chat.id})
       |> Repo.insert()
 
-      chat
+    chat = Repo.preload(chat, :users)
+    {atom, chat}
   end
 
   def add_user(%{"user_id" => user_id, "chat_id" => chat_id}, inviter_id) do
