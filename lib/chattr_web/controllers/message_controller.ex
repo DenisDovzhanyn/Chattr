@@ -9,7 +9,7 @@ defmodule ChattrWeb.MessageController do
       {:ok, messages} ->
         conn
         |> put_status(:ok)
-        |> json(%{messages: messages})
+        |> json(%{messages: messages, chat_id: conn.params["chat_id"]})
 
       _ ->
         AuthenticateJWT.forbidden(conn)
