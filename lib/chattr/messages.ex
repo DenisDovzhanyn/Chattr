@@ -22,7 +22,7 @@ defmodule Chattr.Messages do
             messages = Repo.all(
             from x in Message,
             where: x.chat_id == ^chat_id,
-            order_by: [desc: x.inserted_at],
+            order_by: [asc: x.inserted_at],
             limit: ^String.to_integer(last_x_messages)
             )
             {:ok, messages}
@@ -36,7 +36,7 @@ defmodule Chattr.Messages do
             messages = Repo.all(
               from x in Message,
               where: x.chat_id == ^chat_id and x.id >= ^since_message_id,
-              order_by: [desc: x.inserted_at])
+              order_by: [asc: x.inserted_at])
             {:ok, messages}
 
           nil -> {:unauthorized}
@@ -48,7 +48,7 @@ defmodule Chattr.Messages do
             messages = Repo.all(
               from x in Message,
               where: x.chat_id == ^chat_id,
-              order_by: [desc: x.inserted_at]
+              order_by: [asc: x.inserted_at]
             )
             {:ok, messages}
 
