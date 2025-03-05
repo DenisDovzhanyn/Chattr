@@ -34,6 +34,11 @@ defmodule ChattrWeb.ChatController do
         |> put_status(:unprocessable_entity)
         |> json(%{errors: changeset.errors})
 
+      :not_found ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{error: "User not found"})
+        
       _ ->
         conn
         |> AuthenticateJWT.forbidden()

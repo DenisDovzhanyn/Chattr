@@ -4,6 +4,8 @@ defmodule Chattr.Chats do
   """
 
   import Ecto.Query, warn: false
+  alias Chattr.Accounts.Users
+  alias Chattr.Accounts
   alias ChattrWeb.AuthenticateJWT
   alias Chattr.Repo
   alias Chattr.Messages.Message
@@ -108,17 +110,27 @@ defmodule Chattr.Chats do
     {atom, chat}
   end
 
-  def add_user(%{"user_id" => user_id, "chat_id" => chat_id}, inviter_id) do
+
+  def add_user(%{"username" => username, "chat_id" => chat_id}, inviter_id) do
     case get_chat_by_user_and_chat_id(%{"user_id" => inviter_id, "chat_id" => chat_id}) do
       %UserChat{} ->
-        %UserChat{}
-          |> UserChat.changeset(%{user_id: user_id, chat_id: chat_id})
-          |> Repo.insert()
+        case Accounts.get_users_by_username(username) do
+          %Users{id: user_id} ->
+            {_, userchat} = %UserChat{}
+              |> UserChat.changeset(%{user_id: user_id, chat_id: chat_id})
+              |> Repo.insert()
 
+            chat = Repo.get_by(Chat, id: userchat.chat_id)
+            chat = Repo.preload(chat, :users)
+            {:ok, chat}
+          nil -> :not_found
+        end
       nil -> nil
     end
 
   end
+
+
 
   def remove_user (%{"user_id" => user_id, "chat_id" => chat_id}) do
     case get_chat_by_user_and_chat_id(%{"user_id" => user_id, "chat_id" => chat_id}) do
