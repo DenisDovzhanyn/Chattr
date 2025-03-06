@@ -38,7 +38,11 @@ defmodule ChattrWeb.ChatController do
         conn
         |> put_status(:not_found)
         |> json(%{error: "User not found"})
-        
+
+      :conflict ->
+        conn
+        |> put_status(:conflict)
+        |> json(%{error: "User already in chat"})
       _ ->
         conn
         |> AuthenticateJWT.forbidden()

@@ -116,13 +116,18 @@ defmodule Chattr.Chats do
       %UserChat{} ->
         case Accounts.get_users_by_username(username) do
           %Users{id: user_id} ->
-            {_, userchat} = %UserChat{}
-              |> UserChat.changeset(%{user_id: user_id, chat_id: chat_id})
-              |> Repo.insert()
 
-            chat = Repo.get_by(Chat, id: userchat.chat_id)
-            chat = Repo.preload(chat, :users)
-            {:ok, chat}
+            if get_chat_by_user_and_chat_id(%{"user_id" => user_id, "chat_id" => chat_id}) == nil do
+              {_, userchat} = %UserChat{}
+                |> UserChat.changeset(%{user_id: user_id, chat_id: chat_id})
+                |> Repo.insert()
+
+              chat = Repo.get_by(Chat, id: userchat.chat_id)
+              chat = Repo.preload(chat, :users)
+              {:ok, chat}
+            else 
+              :conflict
+            end
           nil -> :not_found
         end
       nil -> nil
